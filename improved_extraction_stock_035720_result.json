@@ -1,0 +1,31 @@
+{
+  "stock_code": "035720",
+  "company_name": "카카오",
+  "real_time_data": {
+    "current_price": 66600.0,
+    "change_amount": 6200.0,
+    "change_rate": 10.26,
+    "volume": 16723282,
+    "trading_value": "1,062,961백만",
+    "market_cap": "4,216\n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t억원",
+    "high_52w": 67200.0,
+    "low_52w": 32550.0,
+    "foreign_ownership": "28.52%",
+    "investment_opinion": "3.95매수l52,850"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "카카오",
+      "NAVER",
+      "디어유",
+      "SOOP",
+      "자이언트스텝"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": false,
+    "change_rate_calculated": false
+  }
+}

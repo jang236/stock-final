@@ -1,0 +1,56 @@
+{
+  "이노와이어리스": {
+    "code": "073490",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=073490&grp_cd=03&encparam=Uzd4em5NUDhSTmZ4OWUxOS8xTm15Zz09",
+    "collected_at": "2025-06-14 08:39:08",
+    "status": "success"
+  },
+  "두산테스나": {
+    "code": "131970",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=131970&grp_cd=03&encparam=R25DMmN6amlieVczVXdTL3puS1dCZz09",
+    "collected_at": "2025-06-14 08:39:09",
+    "status": "success"
+  },
+  "케이엔제이": {
+    "code": "272110",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=272110&grp_cd=03&encparam=R25DMmN6amlieVczVXdTL3puS1dCZz09",
+    "collected_at": "2025-06-14 08:39:09",
+    "status": "success"
+  },
+  "E8": {
+    "code": "418620",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=418620&grp_cd=03&encparam=R25DMmN6amlieVczVXdTL3puS1dCZz09",
+    "collected_at": "2025-06-14 08:39:09",
+    "status": "success"
+  },
+  "스튜디오미르": {
+    "code": "408900",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=408900&grp_cd=03&encparam=R25DMmN6amlieVczVXdTL3puS1dCZz09",
+    "collected_at": "2025-06-14 08:39:09",
+    "status": "success"
+  },
+  "일신석재": {
+    "code": "007110",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=007110&grp_cd=03&encparam=R25DMmN6amlieVczVXdTL3puS1dCZz09",
+    "collected_at": "2025-06-14 08:39:09",
+    "status": "success"
+  },
+  "네오크레마": {
+    "code": "311390",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=311390&grp_cd=03&encparam=V25lVFBLeHFZeUJ3YXVoSzlVcG9UZz09",
+    "collected_at": "2025-06-14 08:39:10",
+    "status": "success"
+  },
+  "에이아이코리아": {
+    "code": "364950",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=364950&grp_cd=03&encparam=V25lVFBLeHFZeUJ3YXVoSzlVcG9UZz09",
+    "collected_at": "2025-06-14 08:39:10",
+    "status": "success"
+  },
+  "진바이오텍": {
+    "code": "086060",
+    "cF1001_url": "https://navercomp.wisereport.co.kr/company/ajax/cF1001.aspx?flag=4&cmp_cd=086060&grp_cd=03&encparam=V25lVFBLeHFZeUJ3YXVoSzlVcG9UZz09",
+    "collected_at": "2025-06-14 08:39:10",
+    "status": "success"
+  }
+}

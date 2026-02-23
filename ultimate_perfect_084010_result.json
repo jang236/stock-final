@@ -1,0 +1,30 @@
+{
+  "stock_code": "084010",
+  "company_name": "대한제강",
+  "real_time_data": {
+    "current_price": 16700.0,
+    "change_amount": -400.0,
+    "change_rate": -2.34,
+    "volume": 30487,
+    "trading_value": "508백만",
+    "market_cap": null,
+    "high_52w": 17900.0,
+    "low_52w": 11690.0,
+    "foreign_ownership": "4.88%",
+    "investment_opinion": null
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "동종업종비교"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 80.0,
+    "success_count": 8,
+    "total_fields": 10,
+    "mathematical_consistency": "perfect",
+    "quality_grade": "🥇 우수"
+  }
+}

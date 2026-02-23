@@ -1,0 +1,35 @@
+{
+  "stock_code": "096770",
+  "company_name": "SK이노베이션",
+  "real_time_data": {
+    "current_price": 91100.0,
+    "change_amount": -1200.0,
+    "change_rate": -1.3,
+    "volume": 64700,
+    "trading_value": "거래대금42,69342,693백만",
+    "market_cap": "13조7593억원",
+    "high_52w": 140200.0,
+    "low_52w": 63769.99999999999,
+    "foreign_ownership": "13.85%",
+    "investment_opinion": "투자의견l목표주가 3.75매수 l 119"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "SK이노베이션",
+      "SK",
+      "HD현대",
+      "SOil",
+      "GS"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 100.0,
+    "success_count": 10,
+    "total_fields": 10,
+    "mathematical_consistency": "excellent",
+    "range_validation": "valid",
+    "quality_grade": "🏆 완벽"
+  }
+}

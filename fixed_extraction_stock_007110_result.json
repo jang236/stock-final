@@ -1,0 +1,28 @@
+{
+  "stock_code": "007110",
+  "company_name": "일신석재",
+  "real_time_data": {
+    "current_price": 2565.0,
+    "change_amount": 97,
+    "change_rate": 3.93,
+    "volume": 3086471,
+    "trading_value": "8,064백만",
+    "market_cap": "1,987억원",
+    "foreign_ownership": "2.35%"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "일신석재",
+      "KCC",
+      "한일시멘트",
+      "아세아",
+      "한일홀딩스"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": true,
+    "change_rate_calculated": false
+  }
+}

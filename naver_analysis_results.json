@@ -1,0 +1,74 @@
+{
+  "009140": {
+    "main_url": "https://finance.naver.com/item/coinfo.naver?code=009140",
+    "iframe_url": "https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=009140",
+    "cf1001_patterns": [
+      "cF1001.aspx'\r\n\t\t\t\t\t, {\r\n\t\t\t\t\t\tflag: 4,\r\n\t\t\t\t\t\tcmp_cd: '009140',\r\n\t\t\t\t\t\tgrp_cd: grp==10?\"01\":\"03\",\r\n                        encparam: 'VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09'\r\n\t\t\t\t\t}\r\n\t\t\t\t, function (res) {\r\n\t\t\t\t\tvar data = []\r\n\t\t\t\t\t_.each(res.dt, function(v, i){\r\n\t\t\t\t\t\tif(v.MAJOR_NEBUNA == nm)\r\n\t\t\t\t\t\t\tdata.push(v)\r\n\t\t\t\t\t})\r\n\t\t\t\t\tvar tmp = _.template($(\"#tmpl-sJJ\" ).html())",
+      "cF1001.aspx'})",
+      "cF1001.aspx'\r\n\t\t\t, {\r\n\t\t\t\tflag: flag,\r\n\t\t\t\tcmp_cd: '009140',\r\n                encparam: 'VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09'\r\n\t\t\t}\r\n\t\t\t\t, function (res) {\r\n\t\t\t\t\tgtag('config', 'UA-74989022-7', {'page_path': '/company/ajax/cF1001.aspx'})",
+      "cF1001.aspx\",\r\n\t\t\t\tasync  : false,\r\n\t\t\t\ttype    : 'get',\r\n\t\t\t\tdataType: 'html',\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tcmp_cd    : '009140'\r\n                , fin_typ : _fin_typ\r\n\t\t\t\t, freq_typ: _freq_typ\r\n\t\t\t\t, extY: extY\r\n                , extQ: extQ\r\n                , encparam: 'VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09'\r\n                , id: 'ZlEwemUxRm' ? 'ZlEwemUxRm' : ''\r\n\t\t\t\t},\r\n\t\t\t\tsuccess: function (data) {\r\n\t\t\t\t\tgtag('config', 'UA-74989022-7', {'page_path': '/company/ajax/cF1001.aspx'})",
+      "$.getJSON('/company/ajax/cF1001.aspx'\r\n\t\t\t\t\t, {\r\n\t\t\t\t\t\tflag: 4,\r\n\t\t\t\t\t\tcmp_cd: '009140',\r\n\t\t\t\t\t\tgrp_cd: grp==10?\"01\":\"03\",\r\n                        encparam: 'VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09'\r\n\t\t\t\t\t}\r\n\t\t\t\t, function (res)",
+      "$.getJSON('/company/ajax/cF1001.aspx'\r\n\t\t\t, {\r\n\t\t\t\tflag: flag,\r\n\t\t\t\tcmp_cd: '009140',\r\n                encparam: 'VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09'\r\n\t\t\t}\r\n\t\t\t\t, function (res)",
+      "$.ajax({\r\n\t\t\t\turl     : \"ajax/cF1001.aspx\",\r\n\t\t\t\tasync  : false,\r\n\t\t\t\ttype    : 'get',\r\n\t\t\t\tdataType: 'html',\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tcmp_cd    : '009140'\r\n                , fin_typ : _fin_typ\r\n\t\t\t\t, freq_typ: _freq_typ\r\n\t\t\t\t, extY: extY\r\n                , extQ: extQ\r\n                , encparam: 'VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09'\r\n                , id: 'ZlEwemUxRm' ? 'ZlEwemUxRm' : ''\r\n\t\t\t\t},\r\n\t\t\t\tsuccess: function (data)"
+    ],
+    "extracted_params": {
+      "encparam": "VG9RY0Erek5pUDN6c3dmSmhWaS9Cdz09",
+      "id": "text/css",
+      "fin_typ": "0;",
+      "freq_typ": "A",
+      "cmp_cd": "009140"
+    },
+    "api_result": {
+      "success": false,
+      "message": "모든 URL 패턴 실패"
+    }
+  },
+  "005930": {
+    "main_url": "https://finance.naver.com/item/coinfo.naver?code=005930",
+    "iframe_url": "https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=005930",
+    "cf1001_patterns": [
+      "cF1001.aspx'\r\n\t\t\t\t\t, {\r\n\t\t\t\t\t\tflag: 4,\r\n\t\t\t\t\t\tcmp_cd: '005930',\r\n\t\t\t\t\t\tgrp_cd: grp==10?\"01\":\"03\",\r\n                        encparam: 'Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09'\r\n\t\t\t\t\t}\r\n\t\t\t\t, function (res) {\r\n\t\t\t\t\tvar data = []\r\n\t\t\t\t\t_.each(res.dt, function(v, i){\r\n\t\t\t\t\t\tif(v.MAJOR_NEBUNA == nm)\r\n\t\t\t\t\t\t\tdata.push(v)\r\n\t\t\t\t\t})\r\n\t\t\t\t\tvar tmp = _.template($(\"#tmpl-sJJ\" ).html())",
+      "cF1001.aspx'})",
+      "cF1001.aspx'\r\n\t\t\t, {\r\n\t\t\t\tflag: flag,\r\n\t\t\t\tcmp_cd: '005930',\r\n                encparam: 'Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09'\r\n\t\t\t}\r\n\t\t\t\t, function (res) {\r\n\t\t\t\t\tgtag('config', 'UA-74989022-7', {'page_path': '/company/ajax/cF1001.aspx'})",
+      "cF1001.aspx\",\r\n\t\t\t\tasync  : false,\r\n\t\t\t\ttype    : 'get',\r\n\t\t\t\tdataType: 'html',\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tcmp_cd    : '005930'\r\n                , fin_typ : _fin_typ\r\n\t\t\t\t, freq_typ: _freq_typ\r\n\t\t\t\t, extY: extY\r\n                , extQ: extQ\r\n                , encparam: 'Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09'\r\n                , id: 'VGVTbkwxZ2' ? 'VGVTbkwxZ2' : ''\r\n\t\t\t\t},\r\n\t\t\t\tsuccess: function (data) {\r\n\t\t\t\t\tgtag('config', 'UA-74989022-7', {'page_path': '/company/ajax/cF1001.aspx'})",
+      "$.getJSON('/company/ajax/cF1001.aspx'\r\n\t\t\t\t\t, {\r\n\t\t\t\t\t\tflag: 4,\r\n\t\t\t\t\t\tcmp_cd: '005930',\r\n\t\t\t\t\t\tgrp_cd: grp==10?\"01\":\"03\",\r\n                        encparam: 'Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09'\r\n\t\t\t\t\t}\r\n\t\t\t\t, function (res)",
+      "$.getJSON('/company/ajax/cF1001.aspx'\r\n\t\t\t, {\r\n\t\t\t\tflag: flag,\r\n\t\t\t\tcmp_cd: '005930',\r\n                encparam: 'Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09'\r\n\t\t\t}\r\n\t\t\t\t, function (res)",
+      "$.ajax({\r\n\t\t\t\turl     : \"ajax/cF1001.aspx\",\r\n\t\t\t\tasync  : false,\r\n\t\t\t\ttype    : 'get',\r\n\t\t\t\tdataType: 'html',\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tcmp_cd    : '005930'\r\n                , fin_typ : _fin_typ\r\n\t\t\t\t, freq_typ: _freq_typ\r\n\t\t\t\t, extY: extY\r\n                , extQ: extQ\r\n                , encparam: 'Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09'\r\n                , id: 'VGVTbkwxZ2' ? 'VGVTbkwxZ2' : ''\r\n\t\t\t\t},\r\n\t\t\t\tsuccess: function (data)"
+    ],
+    "extracted_params": {
+      "encparam": "Z0xEUnhiMGRiUmNHQmllN0wrQVdpZz09",
+      "id": "text/css",
+      "fin_typ": "0;",
+      "freq_typ": "A",
+      "cmp_cd": "005930"
+    },
+    "api_result": {
+      "success": false,
+      "message": "모든 URL 패턴 실패"
+    }
+  },
+  "035420": {
+    "main_url": "https://finance.naver.com/item/coinfo.naver?code=035420",
+    "iframe_url": "https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=035420",
+    "cf1001_patterns": [
+      "cF1001.aspx'\r\n\t\t\t\t\t, {\r\n\t\t\t\t\t\tflag: 4,\r\n\t\t\t\t\t\tcmp_cd: '035420',\r\n\t\t\t\t\t\tgrp_cd: grp==10?\"01\":\"03\",\r\n                        encparam: 'WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09'\r\n\t\t\t\t\t}\r\n\t\t\t\t, function (res) {\r\n\t\t\t\t\tvar data = []\r\n\t\t\t\t\t_.each(res.dt, function(v, i){\r\n\t\t\t\t\t\tif(v.MAJOR_NEBUNA == nm)\r\n\t\t\t\t\t\t\tdata.push(v)\r\n\t\t\t\t\t})\r\n\t\t\t\t\tvar tmp = _.template($(\"#tmpl-sJJ\" ).html())",
+      "cF1001.aspx'})",
+      "cF1001.aspx'\r\n\t\t\t, {\r\n\t\t\t\tflag: flag,\r\n\t\t\t\tcmp_cd: '035420',\r\n                encparam: 'WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09'\r\n\t\t\t}\r\n\t\t\t\t, function (res) {\r\n\t\t\t\t\tgtag('config', 'UA-74989022-7', {'page_path': '/company/ajax/cF1001.aspx'})",
+      "cF1001.aspx\",\r\n\t\t\t\tasync  : false,\r\n\t\t\t\ttype    : 'get',\r\n\t\t\t\tdataType: 'html',\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tcmp_cd    : '035420'\r\n                , fin_typ : _fin_typ\r\n\t\t\t\t, freq_typ: _freq_typ\r\n\t\t\t\t, extY: extY\r\n                , extQ: extQ\r\n                , encparam: 'WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09'\r\n                , id: 'TDdCYnFkT0' ? 'TDdCYnFkT0' : ''\r\n\t\t\t\t},\r\n\t\t\t\tsuccess: function (data) {\r\n\t\t\t\t\tgtag('config', 'UA-74989022-7', {'page_path': '/company/ajax/cF1001.aspx'})",
+      "$.getJSON('/company/ajax/cF1001.aspx'\r\n\t\t\t\t\t, {\r\n\t\t\t\t\t\tflag: 4,\r\n\t\t\t\t\t\tcmp_cd: '035420',\r\n\t\t\t\t\t\tgrp_cd: grp==10?\"01\":\"03\",\r\n                        encparam: 'WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09'\r\n\t\t\t\t\t}\r\n\t\t\t\t, function (res)",
+      "$.getJSON('/company/ajax/cF1001.aspx'\r\n\t\t\t, {\r\n\t\t\t\tflag: flag,\r\n\t\t\t\tcmp_cd: '035420',\r\n                encparam: 'WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09'\r\n\t\t\t}\r\n\t\t\t\t, function (res)",
+      "$.ajax({\r\n\t\t\t\turl     : \"ajax/cF1001.aspx\",\r\n\t\t\t\tasync  : false,\r\n\t\t\t\ttype    : 'get',\r\n\t\t\t\tdataType: 'html',\r\n\t\t\t\tdata: {\r\n\t\t\t\t\tcmp_cd    : '035420'\r\n                , fin_typ : _fin_typ\r\n\t\t\t\t, freq_typ: _freq_typ\r\n\t\t\t\t, extY: extY\r\n                , extQ: extQ\r\n                , encparam: 'WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09'\r\n                , id: 'TDdCYnFkT0' ? 'TDdCYnFkT0' : ''\r\n\t\t\t\t},\r\n\t\t\t\tsuccess: function (data)"
+    ],
+    "extracted_params": {
+      "encparam": "WncyYmRoV2JZR3YzdGFaNTh6RXN6Zz09",
+      "id": "text/css",
+      "fin_typ": "0;",
+      "freq_typ": "A",
+      "cmp_cd": "035420"
+    },
+    "api_result": {
+      "success": false,
+      "message": "모든 URL 패턴 실패"
+    }
+  }
+}

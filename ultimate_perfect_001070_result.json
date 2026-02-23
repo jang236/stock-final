@@ -1,0 +1,30 @@
+{
+  "stock_code": "001070",
+  "company_name": "대한방직",
+  "real_time_data": {
+    "current_price": 7040.0,
+    "change_amount": -80.0,
+    "change_rate": -1.12,
+    "volume": 35020,
+    "trading_value": "249백만",
+    "market_cap": null,
+    "high_52w": 7660.0,
+    "low_52w": 4928.0,
+    "foreign_ownership": "1.02%",
+    "investment_opinion": null
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "동종업종비교"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 80.0,
+    "success_count": 8,
+    "total_fields": 10,
+    "mathematical_consistency": "perfect",
+    "quality_grade": "🥇 우수"
+  }
+}

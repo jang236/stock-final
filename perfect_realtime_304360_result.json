@@ -1,0 +1,35 @@
+{
+  "stock_code": "304360",
+  "company_name": "에스바이오메딕스",
+  "real_time_data": {
+    "current_price": 23800.0,
+    "change_amount": -650.0,
+    "change_rate": -2.66,
+    "volume": 17150,
+    "trading_value": "거래대금4,6414,641백만",
+    "market_cap": "290조원",
+    "high_52w": 51600.0,
+    "low_52w": 16660.0,
+    "foreign_ownership": "2.57%",
+    "investment_opinion": null
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "에스바이오메딕스",
+      "알테오젠",
+      "휴젤",
+      "펩트론",
+      "에이비엘바이오"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 90.0,
+    "success_count": 9,
+    "total_fields": 10,
+    "mathematical_consistency": "excellent",
+    "range_validation": "valid",
+    "quality_grade": "🏆 완벽"
+  }
+}

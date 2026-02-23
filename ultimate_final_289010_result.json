@@ -1,0 +1,35 @@
+{
+  "company_name": "아이스크림에듀",
+  "stock_code": "289010",
+  "extraction_time": "2025-06-17 11:28:32",
+  "success_count": 10,
+  "total_fields": 12,
+  "current_price": 1992,
+  "change_data": {
+    "change_amount": -23.0,
+    "change_rate": -1.14,
+    "direction": "하락"
+  },
+  "trading_volume": "945,284주",
+  "trading_value": "339백만원",
+  "market_cap": "278억원",
+  "week52_high": "6,660원",
+  "week52_low": "1,394원",
+  "foreign_ratio": "6.78%",
+  "investment_opinion": null,
+  "sector_info": {
+    "sector_name": "비교",
+    "sector_companies": [
+      "아이스크림에듀",
+      "메가스터디교육",
+      "아이스크림미디어",
+      "웅진씽크빅",
+      "대교",
+      "종목명"
+    ]
+  },
+  "success_rate": 83.3,
+  "quality_grade": "🥈 양호",
+  "mathematical_consistency": "perfect",
+  "quality_issues": []
+}

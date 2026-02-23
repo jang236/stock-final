@@ -1,0 +1,27 @@
+{
+  "stock_code": "019170",
+  "company_name": "신풍제약",
+  "real_time_data": {
+    "current_price": 12810.0,
+    "change_amount": 2950,
+    "change_rate": 29.92,
+    "volume": 1959623,
+    "trading_value": "24,221백만",
+    "market_cap": "6,787억원",
+    "high_52w": 19750.0,
+    "low_52w": 2700.0,
+    "foreign_ownership": "4.91%",
+    "investment_opinion": "매수상위"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "신풍제약",
+      "삼성바이오로직스",
+      "셀트리온",
+      "유한양행",
+      "SK바이오팜"
+    ]
+  },
+  "extraction_status": "success"
+}

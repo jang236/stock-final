@@ -1,0 +1,12 @@
+{
+  "last_completed_index": 2878,
+  "total_companies": 2879,
+  "completed_count": 2879,
+  "success_count": 2715,
+  "failed_count": 164,
+  "cycle_count": 15,
+  "total_rest_time": 130.08274069952859,
+  "last_run_date": "2026-01-09 07:49:28",
+  "collection_mode": "auto_rest_200_batch_a_folder",
+  "folder_type": "a"
+}

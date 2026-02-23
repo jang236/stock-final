@@ -1,0 +1,35 @@
+{
+  "stock_code": "009180",
+  "company_name": "한솔로지스틱스",
+  "real_time_data": {
+    "current_price": 2310.0,
+    "change_amount": -10.0,
+    "change_rate": 0.43,
+    "volume": 23202320,
+    "trading_value": "거래대금195195백만",
+    "market_cap": "107조원",
+    "high_52w": 3320.0,
+    "low_52w": 1617.0,
+    "foreign_ownership": "4.64%",
+    "investment_opinion": null
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "한솔로지스틱스",
+      "현대글로비스",
+      "CJ대한통운",
+      "한진",
+      "세방"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 90.0,
+    "success_count": 9,
+    "total_fields": 10,
+    "mathematical_consistency": "good",
+    "range_validation": "valid",
+    "quality_grade": "🏆 완벽"
+  }
+}

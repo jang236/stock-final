@@ -1,0 +1,74 @@
+{
+  "이노와이어리스": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "두산테스나": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "케이엔제이": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "E8": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "스튜디오미르": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "일신석재": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "네오크레마": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "에이아이코리아": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  },
+  "진바이오텍": {
+    "success": true,
+    "found_financial_items": 0,
+    "financial_items": {},
+    "raw_data_keys": [
+      "dt"
+    ]
+  }
+}

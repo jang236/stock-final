@@ -1,0 +1,28 @@
+{
+  "stock_code": "039860",
+  "company_name": "나노엔텍",
+  "real_time_data": {
+    "current_price": 3680.0,
+    "change_amount": 50,
+    "change_rate": 1.38,
+    "volume": 60624,
+    "trading_value": "223백만",
+    "market_cap": "1,182억원",
+    "foreign_ownership": "1.54%"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "나노엔텍",
+      "씨젠",
+      "올릭스",
+      "큐리옥스바이오시스템즈",
+      "토모큐브"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": true,
+    "change_rate_calculated": false
+  }
+}

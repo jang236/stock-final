@@ -1,0 +1,31 @@
+{
+  "stock_code": "051910",
+  "company_name": "LG화학",
+  "real_time_data": {
+    "current_price": 205000.0,
+    "change_amount": 500.0,
+    "change_rate": 0.24,
+    "volume": 178010,
+    "trading_value": "36,876백만",
+    "market_cap": "4,714\n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t억원",
+    "high_52w": 371000.0,
+    "low_52w": 181500.0,
+    "foreign_ownership": "30.29%",
+    "investment_opinion": "3.88매수l310,824"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "LG화학",
+      "포스코퓨처엠",
+      "에코프로",
+      "SKC",
+      "금호석유화학"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": false,
+    "change_rate_calculated": false
+  }
+}

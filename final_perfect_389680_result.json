@@ -1,0 +1,38 @@
+{
+  "company_name": "유디엠텍",
+  "stock_code": "389680",
+  "extraction_time": "2025-06-17 11:00:44",
+  "success_count": 9,
+  "total_fields": 12,
+  "current_price": null,
+  "change_data": {
+    "change_amount": -12.0,
+    "change_rate": -1.8,
+    "direction": "하락"
+  },
+  "trading_volume": "287,764주",
+  "trading_value": "1억원",
+  "market_cap": "272억원",
+  "week52_high": "1,649원",
+  "week52_low": "1,649원",
+  "foreign_ratio": "1.29%",
+  "investment_opinion": null,
+  "sector_info": {
+    "sector_name": "비교",
+    "sector_companies": [
+      "유디엠텍389680",
+      "삼성에스디에스*018260",
+      "카카오페이*377300",
+      "현대오토에버*307950",
+      "종목명",
+      "유디엠텍",
+      "삼성에스디에스",
+      "카카오페이",
+      "씨엔에스",
+      "현대오토에버"
+    ]
+  },
+  "success_rate": 75.0,
+  "quality_grade": "🥈 양호",
+  "mathematical_consistency": "unknown"
+}

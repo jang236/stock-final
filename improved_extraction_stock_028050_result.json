@@ -1,0 +1,31 @@
+{
+  "stock_code": "028050",
+  "company_name": "삼성E&A",
+  "real_time_data": {
+    "current_price": 23100.0,
+    "change_amount": 450.0,
+    "change_rate": 1.91,
+    "volume": 769489,
+    "trading_value": "17,970백만",
+    "market_cap": "5,276\n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t억원",
+    "high_52w": 29300.0,
+    "low_52w": 16300.0,
+    "foreign_ownership": "45.13%",
+    "investment_opinion": "4.00매수l28,059"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "삼성EA",
+      "현대건설",
+      "GS건설",
+      "DL이앤씨",
+      "대우건설"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": false,
+    "change_rate_calculated": false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "stock_code": "137080",
+  "company_name": "나래나노텍",
+  "real_time_data": {
+    "current_price": 3150.0,
+    "change_amount": 30.0,
+    "change_rate": 0.96,
+    "volume": 5425,
+    "trading_value": "17백만",
+    "market_cap": null,
+    "high_52w": 5870.0,
+    "low_52w": 2205.0,
+    "foreign_ownership": "1.03%",
+    "investment_opinion": null
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "동종업종비교"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 80.0,
+    "success_count": 8,
+    "total_fields": 10,
+    "mathematical_consistency": "perfect",
+    "quality_grade": "🥇 우수"
+  }
+}

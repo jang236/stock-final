@@ -1,0 +1,31 @@
+{
+  "stock_code": "000660",
+  "company_name": "SK하이닉스",
+  "real_time_data": {
+    "current_price": 250250.0,
+    "change_amount": 2250.0,
+    "change_rate": 0.91,
+    "volume": 3600454,
+    "trading_value": "915,583백만",
+    "market_cap": "1,826\n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t억원",
+    "high_52w": 260000.0,
+    "low_52w": 144700.0,
+    "foreign_ownership": "55.42%",
+    "investment_opinion": "3.96매수l277,077"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "SK하이닉스",
+      "삼성전자",
+      "한미반도체",
+      "리노공업",
+      "젬백스"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": false,
+    "change_rate_calculated": false
+  }
+}

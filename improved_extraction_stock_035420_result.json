@@ -1,0 +1,31 @@
+{
+  "stock_code": "035420",
+  "company_name": "NAVER",
+  "real_time_data": {
+    "current_price": 206250.0,
+    "change_amount": 3250.0,
+    "change_rate": 1.55,
+    "volume": 689586,
+    "trading_value": "144,460백만",
+    "market_cap": "6,776\n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t억원",
+    "high_52w": 235500.0,
+    "low_52w": 151100.0,
+    "foreign_ownership": "48.50%",
+    "investment_opinion": "3.95매수l275,000"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "NAVER",
+      "카카오",
+      "디어유",
+      "SOOP",
+      "플리토"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": false,
+    "change_rate_calculated": false
+  }
+}

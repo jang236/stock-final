@@ -1,0 +1,29 @@
+{
+  "stock_code": "005930",
+  "company_name": "삼성전자",
+  "real_time_data": {
+    "current_price": 58300.0,
+    "change_amount": -2.0,
+    "change_rate": -2.02,
+    "volume": 20609834,
+    "trading_value": "1,205,262백만",
+    "market_cap": "345조원",
+    "high_52w": 88800.0,
+    "low_52w": 40810,
+    "foreign_ownership": "49.82%",
+    "investment_opinion": "매수상위",
+    "updated_at": "2025-06-15 09:21:57",
+    "low_52w_note": "estimated"
+  },
+  "sector_comparison": {
+    "sector_name": null,
+    "companies": [
+      "삼성전자",
+      "SK하이닉스",
+      "한미반도체",
+      "리노공업058470",
+      "젬백스"
+    ]
+  },
+  "extraction_status": "success"
+}

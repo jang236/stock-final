@@ -1,0 +1,28 @@
+{
+  "stock_code": "012450",
+  "company_name": "한화에어로스페이스",
+  "real_time_data": {
+    "current_price": 938000.0,
+    "change_amount": 4016,
+    "change_rate": 0.43,
+    "volume": 374449,
+    "trading_value": "352,938백만",
+    "market_cap": "4조 4억원",
+    "foreign_ownership": "45.03%"
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "한화에어로스페이스",
+      "LIG넥스원",
+      "한화시스템",
+      "한국항공우주",
+      "엠앤씨솔루션"
+    ]
+  },
+  "extraction_status": "success",
+  "meta_data": {
+    "change_amount_calculated": true,
+    "change_rate_calculated": false
+  }
+}

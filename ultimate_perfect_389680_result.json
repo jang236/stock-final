@@ -1,0 +1,30 @@
+{
+  "stock_code": "389680",
+  "company_name": "유디엠텍",
+  "real_time_data": {
+    "current_price": null,
+    "change_amount": -12.0,
+    "change_rate": -1.8,
+    "volume": 287764,
+    "trading_value": "189백만",
+    "market_cap": null,
+    "high_52w": 1649.0,
+    "low_52w": null,
+    "foreign_ownership": "1.29%",
+    "investment_opinion": null
+  },
+  "sector_comparison": {
+    "sector_name": "동종업종비교",
+    "companies": [
+      "동종업종비교"
+    ]
+  },
+  "extraction_status": "success",
+  "quality_assessment": {
+    "success_rate": 60.0,
+    "success_count": 6,
+    "total_fields": 10,
+    "mathematical_consistency": "unknown",
+    "quality_grade": "🥉 보통"
+  }
+}
