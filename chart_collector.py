@@ -76,16 +76,22 @@ class ChartCollector:
 
             rows = []
             for line in resp.text.strip().split("\n"):
-                match = re.search(r'\["(\d{8})",\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\]', line)
+                match = re.search(r'\["(\d{8})",\s*(\d*),\s*(\d*),\s*(\d*),\s*(\d*),\s*(\d*),\s*([\d.]*)\]', line)
                 if match:
+                    safe_int = lambda v: int(v) if v and v.strip() else 0
+                    safe_float = lambda v: float(v) if v and v.strip() else 0.0
+                    close_val = safe_int(match.group(5))
+                    # 종가가 0인 행은 거래 없는 날이므로 스킵
+                    if close_val == 0:
+                        continue
                     rows.append({
                         "date": match.group(1),
-                        "open": int(match.group(2)),
-                        "high": int(match.group(3)),
-                        "low": int(match.group(4)),
-                        "close": int(match.group(5)),
-                        "volume": int(match.group(6)),
-                        "foreign_ratio": float(match.group(7))
+                        "open": safe_int(match.group(2)),
+                        "high": safe_int(match.group(3)),
+                        "low": safe_int(match.group(4)),
+                        "close": close_val,
+                        "volume": safe_int(match.group(6)),
+                        "foreign_ratio": safe_float(match.group(7))
                     })
             return rows
         except Exception as e:
@@ -132,12 +138,53 @@ class ChartCollector:
     # ─── 종목 리스트 확보 ───
 
     def fetch_stock_list(self) -> list:
-        """네이버 증권에서 코스피/코스닥 전 종목 리스트 확보"""
+        """종목 리스트 확보 (stock_companies.json 우선, 없으면 네이버 크롤링)"""
         stocks = []
+
+        # 1차: stock_companies.json 파일에서 로드
+        json_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "stock_companies.json")
+        if os.path.exists(json_path):
+            try:
+                with open(json_path, "r", encoding="utf-8") as f:
+                    stock_data = json.load(f)
+
+                if isinstance(stock_data, dict):
+                    # 형식: {"회사명": {"code": "종목코드"}, ...}
+                    for name, details in stock_data.items():
+                        code = details.get("code", "") if isinstance(details, dict) else str(details)
+                        if code and name:
+                            stocks.append({
+                                "symbol": code,
+                                "name": name,
+                                "market": "KOSPI"
+                            })
+                elif isinstance(stock_data, list):
+                    # 형식: [{"code": "xxx", "name": "yyy"}, ...] 또는 [["name", "code"], ...]
+                    for item in stock_data:
+                        if isinstance(item, dict):
+                            code = item.get("code", "")
+                            name = item.get("name", "")
+                        elif isinstance(item, (list, tuple)) and len(item) >= 2:
+                            name, code = str(item[0]), str(item[1])
+                        else:
+                            continue
+                        if code and name:
+                            stocks.append({
+                                "symbol": code,
+                                "name": name,
+                                "market": "KOSPI"
+                            })
+
+                print(f"  📋 stock_companies.json에서 {len(stocks)}종목 로드")
+                if stocks:
+                    return stocks
+            except Exception as e:
+                print(f"  ⚠️ stock_companies.json 로드 실패: {e}")
+
+        # 2차: 네이버 증권 크롤링 (fallback)
+        print("  📋 네이버 증권에서 종목 리스트 크롤링...")
         for market_type, market_name in [("0", "KOSPI"), ("1", "KOSDAQ")]:
             try:
-                url = f"https://finance.naver.com/api/sise/etfnav.nhn"
-                # 대안: 네이버 증권 종목 리스트 API
                 page = 1
                 while True:
                     list_url = (
@@ -148,7 +195,6 @@ class ChartCollector:
                     if resp.status_code != 200:
                         break
 
-                    # 종목코드 + 이름 추출
                     codes = re.findall(
                         r'href="/item/main\.naver\?code=(\d{6})"[^>]*>\s*([^<]+)',
                         resp.text
@@ -215,13 +261,17 @@ class ChartCollector:
             name = stock["name"]
             market = stock["market"]
 
-            rows = self.collect_single(sym, name, market, days)
-            if rows > 0:
-                success_count += 1
-                print(f"  [{len(completed)+i}/{total}] {sym} ({name}) → {rows}행 ✅")
-            else:
+            try:
+                rows = self.collect_single(sym, name, market, days)
+                if rows > 0:
+                    success_count += 1
+                    print(f"  [{len(completed)+i}/{total}] {sym} ({name}) → {rows}행 ✅")
+                else:
+                    fail_count += 1
+                    print(f"  [{len(completed)+i}/{total}] {sym} ({name}) → 데이터없음 ⚠️")
+            except Exception as e:
                 fail_count += 1
-                print(f"  [{len(completed)+i}/{total}] {sym} ({name}) → 실패 ❌")
+                print(f"  [{len(completed)+i}/{total}] {sym} ({name}) → 에러: {e} ❌")
 
             completed.add(sym)
 

@@ -5,11 +5,15 @@ SQLite에서 데이터를 읽어 이동평균, RSI, MACD, 볼린저밴드 등을
 import sqlite3
 import os
 import math
+import requests
+import re
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 KST = timezone(timedelta(hours=9))
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "chart_data.db")
+NAVER_CHART_URL = "https://fchart.stock.naver.com/siseJson.naver"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
 
 class ChartService:
@@ -165,6 +169,325 @@ class ChartService:
             "position": position
         }
 
+    # ─── 당일 데이터 실시간 보정 ───
+
+    def _supplement_today(self, symbol: str, rows: list) -> list:
+        """DB 데이터가 오늘자가 아니면 네이버 API에서 실시간 보정"""
+        today = datetime.now(KST).strftime("%Y%m%d")
+
+        # 주말이면 보정 불필요
+        weekday = datetime.now(KST).weekday()
+        if weekday >= 5:  # 토(5), 일(6)
+            return rows
+
+        # 이미 오늘 데이터가 있으면 패스
+        if rows and rows[-1]["date"] >= today:
+            return rows
+
+        # 장 시작 전(09:00 이전)이면 패스
+        hour = datetime.now(KST).hour
+        if hour < 9:
+            return rows
+
+        # 네이버 차트 API에서 최근 7일만 조회 (1회 HTTP 호출)
+        try:
+            end = today
+            start = (datetime.now(KST) - timedelta(days=7)).strftime("%Y%m%d")
+            params = {
+                "symbol": symbol,
+                "requestType": "1",
+                "startTime": start,
+                "endTime": end,
+                "timeframe": "day"
+            }
+            resp = requests.get(NAVER_CHART_URL, params=params, headers=HEADERS, timeout=10)
+            if resp.status_code != 200:
+                return rows
+
+            existing_dates = {r["date"] for r in rows}
+            safe_int = lambda v: int(v) if v and v.strip() else 0
+            safe_float = lambda v: float(v) if v and v.strip() else 0.0
+
+            for line in resp.text.strip().split("\n"):
+                match = re.search(
+                    r'\["(\d{8})",\s*(\d*),\s*(\d*),\s*(\d*),\s*(\d*),\s*(\d*),\s*([\d.]*)\]',
+                    line
+                )
+                if match:
+                    date_val = match.group(1)
+                    close_val = safe_int(match.group(5))
+                    if close_val == 0 or date_val in existing_dates:
+                        continue
+                    rows.append({
+                        "date": date_val,
+                        "open": safe_int(match.group(2)),
+                        "high": safe_int(match.group(3)),
+                        "low": safe_int(match.group(4)),
+                        "close": close_val,
+                        "volume": safe_int(match.group(6)),
+                        "foreign_ratio": safe_float(match.group(7)),
+                        "symbol": symbol
+                    })
+
+            rows.sort(key=lambda x: x["date"])
+        except Exception as e:
+            print(f"  ⚠️ 당일 보정 실패 ({symbol}): {e}")
+
+        return rows
+
+    # ─── 고급 분석 ───
+
+    def calc_similar_periods(self, rows: list, closes: list, current_rsi: float, macd_data: dict) -> list:
+        """과거 유사 구간 비교 — RSI·MACD가 현재와 비슷했던 과거 시점 + 이후 수익률"""
+        if not current_rsi or not macd_data or len(closes) < 80:
+            return []
+
+        current_macd_positive = macd_data.get("histogram", 0) > 0
+        similar = []
+
+        # 과거 데이터를 순회하며 유사 구간 탐색 (최근 20일은 제외)
+        for i in range(30, len(closes) - 20):
+            # RSI 계산 (해당 시점까지의 데이터)
+            segment = closes[:i+1]
+            past_rsi = self.calc_rsi(segment)
+            if past_rsi is None:
+                continue
+
+            # RSI 유사도 (±5 범위)
+            if abs(past_rsi - current_rsi) > 5:
+                continue
+
+            # MACD 방향 유사도
+            past_macd = self.calc_macd(segment)
+            if not past_macd:
+                continue
+            past_macd_positive = past_macd.get("histogram", 0) > 0
+            if past_macd_positive != current_macd_positive:
+                continue
+
+            # 이후 수익률 계산
+            base_price = closes[i]
+            returns = {}
+            for days, label in [(5, "return_5d"), (20, "return_20d"), (60, "return_60d")]:
+                if i + days < len(closes):
+                    ret = round((closes[i + days] - base_price) / base_price * 100, 1)
+                    returns[label] = ret
+                else:
+                    returns[label] = None
+
+            similar.append({
+                "date": rows[i]["date"],
+                "rsi": past_rsi,
+                "macd_histogram": past_macd["histogram"],
+                "price": base_price,
+                **returns
+            })
+
+        # 최대 5개만 반환 (가장 최근 유사 구간부터)
+        similar = similar[-5:] if len(similar) > 5 else similar
+
+        # 통계 요약
+        if similar:
+            valid_5d = [s["return_5d"] for s in similar if s.get("return_5d") is not None]
+            valid_20d = [s["return_20d"] for s in similar if s.get("return_20d") is not None]
+            valid_60d = [s["return_60d"] for s in similar if s.get("return_60d") is not None]
+
+            summary = {
+                "count": len(similar),
+                "avg_return_5d": round(sum(valid_5d) / len(valid_5d), 1) if valid_5d else None,
+                "avg_return_20d": round(sum(valid_20d) / len(valid_20d), 1) if valid_20d else None,
+                "avg_return_60d": round(sum(valid_60d) / len(valid_60d), 1) if valid_60d else None,
+                "win_rate_20d": round(sum(1 for r in valid_20d if r > 0) / len(valid_20d) * 100) if valid_20d else None
+            }
+        else:
+            summary = {"count": 0}
+
+        return {"periods": similar, "summary": summary}
+
+    def calc_disparity(self, closes: list) -> dict:
+        """이동평균선 이격도 추이 — 현재 이격도 + 1년 내 맥락"""
+        result = {}
+        current_price = closes[-1]
+
+        for period, label in [(20, "ma20"), (60, "ma60")]:
+            if len(closes) < period:
+                continue
+
+            # 현재 이격도
+            ma_value = sum(closes[-period:]) / period
+            current_disparity = round((current_price / ma_value - 1) * 100, 1)
+
+            # 과거 이격도 히스토리 (최대 250일)
+            history = []
+            for i in range(period, len(closes)):
+                ma_at_i = sum(closes[i-period:i]) / period
+                disp = round((closes[i] / ma_at_i - 1) * 100, 1)
+                history.append(disp)
+
+            if not history:
+                continue
+
+            # 통계
+            max_disp = max(history)
+            min_disp = min(history)
+            avg_disp = round(sum(history) / len(history), 1)
+
+            # 백분위 (현재 이격도가 히스토리에서 어느 위치인지)
+            below = sum(1 for h in history if h < current_disparity)
+            percentile = round(below / len(history) * 100)
+
+            result[label] = {
+                "current": current_disparity,
+                "ma_value": round(ma_value),
+                "max_1y": max_disp,
+                "min_1y": min_disp,
+                "avg_1y": avg_disp,
+                "percentile": percentile,
+                "interpretation": self._interpret_disparity(current_disparity, percentile, label)
+            }
+
+        return result
+
+    def _interpret_disparity(self, disparity: float, percentile: int, ma_type: str) -> str:
+        """이격도 해석"""
+        if percentile <= 10:
+            return f"하위 {percentile}% — 극단적 이격, 반등 가능성 높음"
+        elif percentile <= 25:
+            return f"하위 {percentile}% — 과도한 이격, 회귀 가능성"
+        elif percentile >= 90:
+            return f"상위 {100-percentile}% — 극단적 괴리, 조정 가능성 높음"
+        elif percentile >= 75:
+            return f"상위 {100-percentile}% — 과열 구간, 주의 필요"
+        else:
+            return f"중립 구간 ({percentile}%)"
+
+    def calc_volume_anomaly(self, rows: list) -> dict:
+        """거래량 이상 감지 — 가격·거래량 조합 해석"""
+        if len(rows) < 25:
+            return {"signal": "데이터 부족"}
+
+        today = rows[-1]
+        today_vol = today["volume"]
+        today_change = (today["close"] - rows[-2]["close"]) / rows[-2]["close"] * 100 if len(rows) >= 2 else 0
+
+        # 평균 거래량
+        vol_5d = sum(r["volume"] for r in rows[-6:-1]) / 5  # 오늘 제외 5일
+        vol_20d = sum(r["volume"] for r in rows[-21:-1]) / 20  # 오늘 제외 20일
+
+        ratio_5d = round(today_vol / vol_5d, 2) if vol_5d > 0 else 0
+        ratio_20d = round(today_vol / vol_20d, 2) if vol_20d > 0 else 0
+
+        # 거래량 + 가격 방향 조합 해석
+        if ratio_20d >= 2.0:
+            if today_change > 0:
+                signal = "거래량 폭증 + 상승 → 세력 매수 가능, 추세 전환 시그널"
+                level = "매우 강함"
+            else:
+                signal = "거래량 폭증 + 하락 → 투매 또는 손절 물량, 바닥 확인 필요"
+                level = "매우 강함"
+        elif ratio_20d >= 1.5:
+            if today_change > 0:
+                signal = "거래량 증가 + 상승 → 건전한 상승, 추세 지속 가능"
+                level = "강함"
+            else:
+                signal = "거래량 증가 + 하락 → 매도 압력 증가, 추가 하락 주의"
+                level = "강함"
+        elif ratio_20d <= 0.5:
+            if today_change > 0:
+                signal = "거래량 급감 + 상승 → 상승 동력 약화, 신뢰도 낮음"
+                level = "약함"
+            else:
+                signal = "거래량 급감 + 하락 → 관심 감소, 바닥 다지기 가능"
+                level = "약함"
+        else:
+            signal = "거래량 보합권 → 특이사항 없음"
+            level = "보통"
+
+        return {
+            "today_volume": today_vol,
+            "avg_5d": round(vol_5d),
+            "avg_20d": round(vol_20d),
+            "ratio_5d": ratio_5d,
+            "ratio_20d": ratio_20d,
+            "price_change": round(today_change, 2),
+            "signal": signal,
+            "level": level
+        }
+
+    def calc_support_resistance_strength(self, rows: list, closes: list, ma: dict) -> dict:
+        """지지/저항선 강도 점수 (1~10)"""
+        if len(rows) < 60:
+            return {"support": [], "resistance": []}
+
+        current_price = closes[-1]
+        recent_60 = rows[-60:]
+
+        # 지지선/저항선 후보 추출
+        highs = sorted(set(r["high"] for r in recent_60), reverse=True)
+        lows = sorted(set(r["low"] for r in recent_60))
+        resistance_candidates = [h for h in highs[:5] if h > current_price]
+        support_candidates = [l for l in lows[:5] if l < current_price]
+
+        def score_level(price_level, is_support=True):
+            score = 0
+            reasons = []
+
+            # 1. 이동평균선 근접 (±2% 이내) — 최대 3점
+            for period, ma_key in [(20, "ma20"), (60, "ma60"), (120, "ma120")]:
+                ma_val = ma.get(ma_key)
+                if ma_val and abs(ma_val - price_level) / price_level < 0.02:
+                    score += 3
+                    reasons.append(f"이동평균선 {period}일 근접")
+                    break  # 하나만 카운트
+
+            # 2. 과거 지지/저항 횟수 — 최대 4점
+            touch_count = 0
+            for r in recent_60:
+                if is_support:
+                    if abs(r["low"] - price_level) / price_level < 0.02:
+                        touch_count += 1
+                else:
+                    if abs(r["high"] - price_level) / price_level < 0.02:
+                        touch_count += 1
+            touch_score = min(touch_count, 4)
+            score += touch_score
+            if touch_count > 0:
+                reasons.append(f"과거 {touch_count}회 {'지지' if is_support else '저항'}")
+
+            # 3. 거래량 집중 구간 — 최대 3점
+            vol_at_level = []
+            for r in recent_60:
+                if abs(r["close"] - price_level) / price_level < 0.03:
+                    vol_at_level.append(r["volume"])
+            if vol_at_level:
+                avg_vol = sum(r["volume"] for r in recent_60) / len(recent_60)
+                vol_ratio = sum(vol_at_level) / len(vol_at_level) / avg_vol if avg_vol > 0 else 0
+                if vol_ratio > 1.5:
+                    score += 3
+                    reasons.append("거래량 집중 구간")
+                elif vol_ratio > 1.0:
+                    score += 1
+                    reasons.append("거래량 소폭 집중")
+
+            return {
+                "price": price_level,
+                "score": min(score, 10),
+                "reasons": reasons,
+                "vs_current": round((price_level - current_price) / current_price * 100, 1)
+            }
+
+        support_scored = [score_level(p, is_support=True) for p in support_candidates[:3]]
+        resistance_scored = [score_level(p, is_support=False) for p in resistance_candidates[:3]]
+
+        # 점수 내림차순 정렬
+        support_scored.sort(key=lambda x: x["score"], reverse=True)
+        resistance_scored.sort(key=lambda x: x["score"], reverse=True)
+
+        return {
+            "support": support_scored,
+            "resistance": resistance_scored
+        }
+
     # ─── 종합 분석 ───
 
     def analyze(self, symbol: str, days: int = 120) -> dict:
@@ -174,6 +497,10 @@ class ChartService:
             return {"error": f"No data for {symbol}"}
 
         rows.reverse()  # 날짜 오름차순으로 정렬
+
+        # 당일 데이터 실시간 보정 (DB에 오늘 데이터 없으면 네이버 API에서 가져옴)
+        rows = self._supplement_today(symbol, rows)
+
         closes = [r["close"] for r in rows]
         current_price = closes[-1]
 
@@ -295,6 +622,25 @@ class ChartService:
         name = meta_row[0]["name"] if meta_row else symbol
         market = meta_row[0]["market"] if meta_row else ""
 
+        # ─── 고급 분석 계산 ───
+        advanced = {}
+        try:
+            advanced["similar_periods"] = self.calc_similar_periods(rows, closes, rsi, macd)
+        except Exception as e:
+            advanced["similar_periods"] = {"error": str(e)}
+        try:
+            advanced["disparity"] = self.calc_disparity(closes)
+        except Exception as e:
+            advanced["disparity"] = {"error": str(e)}
+        try:
+            advanced["volume_anomaly"] = self.calc_volume_anomaly(rows)
+        except Exception as e:
+            advanced["volume_anomaly"] = {"error": str(e)}
+        try:
+            advanced["support_resistance_strength"] = self.calc_support_resistance_strength(rows, closes, ma)
+        except Exception as e:
+            advanced["support_resistance_strength"] = {"error": str(e)}
+
         return {
             "symbol": symbol,
             "name": name,
@@ -316,6 +662,7 @@ class ChartService:
                 "support": support[:3],
                 "resistance": resistance[:3]
             },
+            "advanced_analysis": advanced,
             "recent_20days": recent_data
         }
 
