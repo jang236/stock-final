@@ -226,20 +226,23 @@ class EnhancedIntegratedFinancialSystem:
         return None
 
     def _extract_headers(self, table: Any) -> List[str]:
-        """테이블에서 헤더(시계열 정보) 추출 (기존 로직 유지)"""
+        """테이블에서 헤더(시계열 정보) 추출 — 연도 자동 계산"""
         rows = table.find_all('tr')
+        current_year = datetime.now().year
+        target_years = [str(y) for y in range(current_year - 3, current_year + 1)]
 
         for row in rows:
             cells = [cell.get_text(strip=True) for cell in row.find_all(['th', 'td'])]
-            # 연도 정보가 포함된 행을 헤더로 인식
-            if any('2022' in cell or '2023' in cell or '2024' in cell or '2025' in cell for cell in cells):
+            # 연도 정보가 포함된 행을 헤더로 인식 (동적 연도)
+            if any(year in cell for year in target_years for cell in cells):
                 # 첫 번째 셀이 빈 경우 제거
                 if cells and not cells[0]:
                     return cells[1:]
                 return cells
 
-        # 기본 헤더 반환
-        return ['2022/12(IFRS연결)', '2023/12(IFRS연결)', '2024/12(IFRS연결)', '2025/12(E)(IFRS연결)', '2024/09(IFRS연결)', '2024/12(IFRS연결)', '2025/03(IFRS연결)', '2025/06(E)(IFRS연결)']
+        # 기본 헤더 반환 (동적 연도)
+        y = current_year
+        return [f'{y-3}/12(IFRS연결)', f'{y-2}/12(IFRS연결)', f'{y-1}/12(IFRS연결)', f'{y}/12(E)(IFRS연결)', f'{y-1}/09(IFRS연결)', f'{y-1}/12(IFRS연결)', f'{y}/03(IFRS연결)', f'{y}/06(E)(IFRS연결)']
 
     def _extract_financial_items(self, table: Any) -> Dict[str, List[str]]:
         """테이블에서 재무항목 데이터 추출 (기존 로직 유지)"""
