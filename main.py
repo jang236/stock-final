@@ -3,8 +3,12 @@
 실시간 주가 + 재무제표 + 뉴스 + 차트분석 → 한 번의 API 호출로 완전한 기업분석
 """
 from fastapi import FastAPI, HTTPException, Query, Request
-from fastapi.responses import Response
+from fastapi.responses import Response, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from slowapi.util import get_remote_address
 import requests as http_requests
 import sys
 import os
@@ -23,30 +27,53 @@ app = FastAPI(
     title="🚀 ALL-IN-ONE 기업분석 API",
     description="""
     **완전한 기업분석을 한 번의 API 호출로!**
-    
+
     ## 🎯 혁신적 통합 시스템
     - **실시간 주가**: 8개 핵심 항목 (현재가, 등락률, 거래량 등)
     - **재무제표**: 34개 재무항목 (매출액, 영업이익, ROE 등)
     - **뉴스 분석**: 24시간 최신 + 과거 관련 뉴스
     - **차트 분석**: 기술적 지표 (이동평균, RSI, MACD, 볼린저밴드)
-    
+
     ## 💫 한 번의 API 호출로 완전한 기업분석
     \`/analyze-company?company_name=삼성전자\`
-    
+
     ## 🤖 GPTs Actions 완벽 최적화
     ChatGPT에서 "삼성전자 분석해줘"로 사용 가능
     """,
-    version="7.0.0"
+    version="7.0.0",
+    openapi_url=None,
+    docs_url=None,
+    redoc_url=None,
 )
 
-# CORS 설정
+# CORS 설정 (화이트리스트)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_origins=[
+        "https://chat.openai.com",
+        "https://chatgpt.com",
+        "https://claude.ai",
+        "https://stock-final.replit.app",
+    ],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
+
+# 레이트리밋 (IP당 분당 60회)
+limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+app.state.limiter = limiter
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요."},
+    )
+
+
+app.add_middleware(SlowAPIMiddleware)
 
 # 🛡️ 4개 시스템 안전 로드
 STOCK_SYSTEM_READY = False
