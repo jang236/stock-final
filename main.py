@@ -60,8 +60,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 레이트리밋 (IP당 분당 60회)
-limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+# 레이트리밋 (IP당 분당 300회)
+limiter = Limiter(key_func=get_remote_address, default_limits=["300/minute"])
 app.state.limiter = limiter
 
 
