@@ -12,7 +12,21 @@ from slowapi.util import get_remote_address
 import requests as http_requests
 import sys
 import os
+import logging
 from datetime import datetime, timezone, timedelta
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("stock-final")
+
+# MCP 서버 (optional — 실패해도 앱은 동작)
+_MCP_AVAILABLE = False
+_mcp_server = None
+try:
+    from mcp_server import mcp as _mcp_server
+    _MCP_AVAILABLE = True
+    logger.info("MCP server module loaded")
+except Exception as e:
+    logger.warning(f"MCP server unavailable: {type(e).__name__}: {e}")
 
 # KST 시간대 설정
 KST = timezone(timedelta(hours=9))
@@ -40,11 +54,40 @@ app = FastAPI(
     ## 🤖 GPTs Actions 완벽 최적화
     ChatGPT에서 "삼성전자 분석해줘"로 사용 가능
     """,
-    version="7.0.0",
+    version="7.1.0",
     openapi_url=None,
     docs_url=None,
     redoc_url=None,
 )
+
+
+# ─────────────────────────────────────────────
+# MCP 서버 마운트 (SSE 트랜스포트)
+# /mcp/sse (GET, SSE stream), /mcp/messages (POST, JSON-RPC)
+# ─────────────────────────────────────────────
+def _mount_mcp():
+    """앱 생성 직후 MCP 마운트. 앱 인스턴스(app) 사용 시점 이후 호출됨."""
+    global _MCP_AVAILABLE
+    if not (_MCP_AVAILABLE and _mcp_server is not None):
+        return
+    try:
+        _mcp_app = None
+        if hasattr(_mcp_server, "sse_app"):
+            _mcp_app = _mcp_server.sse_app()
+        elif hasattr(_mcp_server, "streamable_http_app"):
+            _mcp_app = _mcp_server.streamable_http_app()
+        if _mcp_app is not None:
+            app.mount("/mcp", _mcp_app)
+            logger.info("MCP mounted at /mcp (SSE endpoint: /mcp/sse)")
+        else:
+            logger.warning("MCP server has no ASGI app method")
+            _MCP_AVAILABLE = False
+    except Exception as e:
+        logger.error(f"MCP mount failed: {type(e).__name__}: {e}")
+        _MCP_AVAILABLE = False
+
+
+_mount_mcp()
 
 # CORS 설정 (화이트리스트)
 app.add_middleware(
