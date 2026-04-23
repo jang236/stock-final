@@ -7,11 +7,17 @@
   - get_company_news     : 기업 뉴스
   - get_chart_analysis   : 차트 기술적 분석 (MA/RSI/MACD/BB)
 
-구현: async httpx로 로컬 FastAPI 호출 (동기 requests는 이벤트 루프 블로킹 이슈로 제외).
+구현 방식:
+- HTTP localhost 호출 대신 main.py의 async 엔드포인트 함수를 직접 import 호출.
+- Replit Autoscale의 localhost 라우팅 불확실성 회피.
+- 이벤트 루프 공유 (async 네이티브).
 """
 from typing import Optional
+import json
+import asyncio
 
-import httpx
+from fastapi import HTTPException
+from fastapi.responses import Response
 from mcp.server.fastmcp import FastMCP
 
 # ─────────────────────────────────────────────
@@ -46,34 +52,54 @@ else:
             except AttributeError:
                 pass
 
+
 # ─────────────────────────────────────────────
-# 비동기 로컬 HTTP 호출 (동일 프로세스 FastAPI)
+# main.py 함수 직접 호출 헬퍼
+# (Lazy import로 순환 참조 회피: main.py는 import 시 mcp_server를 로드함)
 # ─────────────────────────────────────────────
-LOCAL_BASE = "http://localhost:8000"
-DEFAULT_TIMEOUT = 45.0  # Naver 스크래핑 최대 30초 + 여유
+def _unwrap(result):
+    """FastAPI endpoint 함수의 반환값을 dict로 정규화.
+
+    - 이미 dict면 그대로
+    - fastapi.Response 면 body JSON 파싱
+    - 기타는 그대로 반환
+    """
+    if isinstance(result, dict):
+        return result
+    if isinstance(result, Response):
+        body = getattr(result, "body", b"")
+        if isinstance(body, (bytes, bytearray)) and body:
+            try:
+                return json.loads(body)
+            except Exception:
+                return {"raw": body.decode("utf-8", errors="replace")[:4000]}
+    return result
 
 
-async def _call_local(
-    path: str,
-    params: Optional[dict] = None,
-    timeout: float = DEFAULT_TIMEOUT,
-) -> dict:
-    """비동기 로컬 FastAPI 호출. 실패 시 error dict 반환."""
+async def _invoke(func_name: str, *args, **kwargs) -> dict:
+    """main 모듈의 엔드포인트 함수 직접 호출.
+
+    - async 함수: await
+    - sync 함수: asyncio.to_thread (이벤트 루프 블로킹 방지)
+    """
     try:
-        async with httpx.AsyncClient(
-            base_url=LOCAL_BASE, timeout=timeout
-        ) as client:
-            resp = await client.get(path, params=params or {})
-            if resp.status_code == 200:
-                return resp.json()
-            return {
-                "error": f"HTTP {resp.status_code}",
-                "detail": resp.text[:400] if resp.text else "",
-            }
-    except httpx.TimeoutException:
-        return {"error": "timeout", "detail": f"응답 지연 ({timeout}s 초과)"}
+        import main as _main  # lazy: 순환 회피
+        func = getattr(_main, func_name, None)
+        if func is None:
+            return {"error": "function_not_found", "name": func_name}
+        if asyncio.iscoroutinefunction(func):
+            result = await func(*args, **kwargs)
+        else:
+            # sync 함수는 스레드풀에서 실행 (Naver 스크래핑 블로킹 I/O 안전 처리)
+            result = await asyncio.to_thread(func, *args, **kwargs)
+        return _unwrap(result)
+    except HTTPException as he:
+        return {
+            "error": f"http_{he.status_code}",
+            "detail": he.detail if isinstance(he.detail, (dict, list, str)) else str(he.detail),
+        }
     except Exception as e:
-        return {"error": f"{type(e).__name__}", "detail": str(e)[:200]}
+        return {"error": f"{type(e).__name__}", "detail": str(e)[:300]}
 
 
 # ─────────────────────────────────────────────
@@ -87,15 +113,13 @@ async def analyze_company(
     """한 번의 호출로 기업의 실시간 주가·재무제표·뉴스·차트를 통합 분석합니다.
 
     Args:
-        company_name: 기업명 (한글/영어 지원). 예: "삼성전자", "SK하이닉스", "NAVER".
-        format: "full" (전체), "summary" (요약), "gpts" (GPTs 최적화).
-
-    Returns:
-        통합 분석 결과 (주가 8항목 + 재무 34항목 + 뉴스 + 차트 분석).
+        company_name: 기업명 (한글/영어 지원).
+        format: "full" | "summary" | "gpts".
     """
-    return await _call_local(
-        "/analyze-company",
-        {"company_name": company_name, "format": format},
+    return await _invoke(
+        "analyze_company_complete",
+        company_name=company_name,
+        format=format,
     )
 
 
@@ -104,15 +128,8 @@ async def analyze_company(
 # ─────────────────────────────────────────────
 @mcp.tool()
 async def get_stock_price(company_name: str) -> dict:
-    """기업의 실시간 주가와 관련 지표 8가지를 조회합니다.
-
-    Args:
-        company_name: 기업명.
-
-    Returns:
-        현재가, 전일비, 등락률, 거래량, 거래대금, 시가총액, 외국인지분율 등.
-    """
-    return await _call_local(f"/stock/{company_name}", timeout=20.0)
+    """기업의 실시간 주가와 관련 지표 8가지를 조회합니다."""
+    return await _invoke("get_real_time_stock", company_name=company_name)
 
 
 # ─────────────────────────────────────────────
@@ -120,15 +137,8 @@ async def get_stock_price(company_name: str) -> dict:
 # ─────────────────────────────────────────────
 @mcp.tool()
 async def get_financial_data(company_name: str) -> dict:
-    """기업의 재무제표 34개 핵심 항목을 최근 4년치 조회합니다.
-
-    Args:
-        company_name: 기업명.
-
-    Returns:
-        매출액, 영업이익, 순이익, ROE, PER, PBR, EPS, BPS 등 34개 항목.
-    """
-    return await _call_local(f"/financial/{company_name}")
+    """기업의 재무제표 34개 핵심 항목을 최근 4년치 조회합니다."""
+    return await _invoke("get_financial_analysis", company_name=company_name)
 
 
 # ─────────────────────────────────────────────
@@ -136,15 +146,8 @@ async def get_financial_data(company_name: str) -> dict:
 # ─────────────────────────────────────────────
 @mcp.tool()
 async def get_company_news(company_name: str) -> dict:
-    """기업 관련 뉴스를 네이버 뉴스 API 기반으로 조회합니다.
-
-    Args:
-        company_name: 기업명.
-
-    Returns:
-        최신 24시간 + 관련 과거 뉴스 목록.
-    """
-    return await _call_local(f"/news/{company_name}", timeout=20.0)
+    """기업 관련 뉴스를 네이버 뉴스 API 기반으로 조회합니다."""
+    return await _invoke("get_news_analysis", company_name=company_name)
 
 
 # ─────────────────────────────────────────────
@@ -155,9 +158,6 @@ async def get_chart_analysis(symbol: str) -> dict:
     """종목의 차트 기술적 분석 (MA, RSI, MACD, 볼린저밴드).
 
     Args:
-        symbol: 종목 코드 (6자리). 예: "005930" (삼성전자), "000660" (SK하이닉스).
-
-    Returns:
-        이동평균선, RSI, MACD, 볼린저밴드 등 기술적 지표.
+        symbol: 종목 코드 (6자리). 예: "005930" (삼성전자).
     """
-    return await _call_local(f"/api/chart/{symbol}/analysis", timeout=20.0)
+    return await _invoke("chart_analysis", symbol=symbol)
