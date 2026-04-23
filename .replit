@@ -1,4 +1,4 @@
-run = "uvicorn main:app --host 0.0.0.0 --port 8000"
+run = "uvicorn main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*"
 entrypoint = "main.py"
 modules = ["python-3.11", "postgresql-16"]
 
@@ -13,7 +13,7 @@ externalPort = 80
 
 [deployment]
 build = ["sh", "-c", "pip install -r requirements.txt"]
-run = ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+run = ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers", "--forwarded-allow-ips=*"]
 deploymentTarget = "gce"
 
 [nix]
@@ -41,7 +41,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "uvicorn main:app --host 0.0.0.0 --port 8000"
+args = "uvicorn main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips=*"
 waitForPort = 8000
 
 [workflows.workflow.metadata]
